@@ -1,19 +1,30 @@
 const express = require("express");
-const path = require("path");
 const app = express();
+const logger = require("./logger");
+const authorize = require("./authorize");
 
-//setup static and middleware
-//using this function we do not need to declare the path of every file, icon or css we are using
-app.use(express.static('./public'))
+// req => middleware ==> res
+app.use([logger, authorize]);
 
-// app.get("/", (req, res) => {
-//     res.status(200).sendFile(path.resolve(__dirname, './index.html'))
-// });
+// app.use("/api", logger);
+// if we add a path as above, the logger middleware will only work for the paths starting with "/api"
 
-app.all("*", (req, res) => {
-  res.status(404).send("Resource not found");
+app.get("/", (req, res) => {
+  res.send("Home Sabinaaaaaaa");
+});
+
+app.get("/about", (req, res) => {
+  res.send("About page");
+});
+
+app.get("/api/products", (req, res) => {
+  res.send("Products page");
+});
+
+app.get("/api/items", (req, res) => {
+  res.send("Items page");
 });
 
 app.listen(5000, () => {
-  console.log("Server is listening on port 5000...");
+  console.log("Server is listening to port 5000...");
 });
